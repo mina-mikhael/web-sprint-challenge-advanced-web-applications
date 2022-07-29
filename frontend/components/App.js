@@ -113,7 +113,19 @@ export default function App() {
 
   const deleteArticle = (article_id) => {
     // ✨ implement
-    axiosWithAuth().delete(`http://localhost:9000/api/articles/${article_id}`);
+    setSpinnerOn(true);
+    // setCurrentArticleId(article_id);
+    axiosWithAuth()
+      .delete(`http://localhost:9000/api/articles/${article_id}`)
+      .then((res) => {
+        setArticles(articles.filter((art) => art.article_id !== article_id));
+        setMessage(res.data.message);
+        setSpinnerOn(false);
+      })
+      .catch((err) => {
+        setMessage(err);
+        setSpinnerOn(false);
+      });
   };
 
   return (
@@ -152,6 +164,7 @@ export default function App() {
                   articles={articles}
                   redirectToLogin={redirectToLogin}
                   currentArticleId={currentArticleId}
+                  deleteArticle={deleteArticle}
                 />
               </>
             }

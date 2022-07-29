@@ -2,7 +2,13 @@ import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
 
-export default function Articles({ getArticles, articles, redirectToLogin, currentArticleId }) {
+export default function Articles({
+  getArticles,
+  articles,
+  redirectToLogin,
+  currentArticleId,
+  deleteArticle,
+}) {
   // ✨ where are my props? Destructure them here
 
   // ✨ implement conditional logic: if no token exists
@@ -35,7 +41,7 @@ export default function Articles({ getArticles, articles, redirectToLogin, curre
                   <button disabled={false} onClick={Function.prototype}>
                     Edit
                   </button>
-                  <button disabled={false} onClick={Function.prototype}>
+                  <button disabled={false} onClick={() => deleteArticle(art.article_id)}>
                     Delete
                   </button>
                 </div>
