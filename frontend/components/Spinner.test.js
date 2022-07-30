@@ -16,6 +16,7 @@ describe("Spinner is working properly", () => {
     const spinnerText = screen.queryByText(/please wait/i);
     expect(spinnerText).not.toBeInTheDocument();
     expect(spinnerText).toBeFalsy();
+    expect(spinnerText).toBeNull();
   });
 });
 
