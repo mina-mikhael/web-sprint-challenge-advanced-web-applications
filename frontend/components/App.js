@@ -47,7 +47,7 @@ export default function App() {
     // to the Articles screen. Don't forget to turn off the spinner!
     setSpinnerOn(true);
     axios
-      .post("http://localhost:9000/api/login", { username: username, password: password })
+      .post(loginUrl, { username: username, password: password })
       .then((res) => {
         setSpinnerOn(false);
         setMessage(res.data.message);
@@ -72,7 +72,7 @@ export default function App() {
     // Don't forget to turn off the spinner!
     setSpinnerOn(true);
     axiosWithAuth()
-      .get("http://localhost:9000/api/articles")
+      .get(articlesUrl)
       .then((res) => {
         setArticles(res.data.articles);
         setMessage(res.data.message);
@@ -91,39 +91,56 @@ export default function App() {
     // to inspect the response from the server.
     setSpinnerOn(true);
     axiosWithAuth()
-      .post(
-        `http://localhost:9000/api/articles/${currentArticleId ? currentArticleId : ""}`,
-        article
-      )
+      .post(articlesUrl, article)
       .then((res) => {
         setArticles([...articles, res.data.article]);
         setMessage(res.data.message);
         setSpinnerOn(false);
       })
       .catch((err) => {
-        setMessage(err);
+        setMessage(err.response.data.message);
         setSpinnerOn(false);
       });
   };
 
-  const updateArticle = ({ article_id, article }) => {
+  const updateArticle = (id, article) => {
     // ✨ implement
     // You got this!
+    setSpinnerOn(true);
+    axiosWithAuth()
+      .put(`${articlesUrl}/${id}`, article)
+      .then((res) => {
+        setArticles([
+          ...articles.filter((art) => art.article_id !== currentArticleId),
+          res.data.article,
+        ]);
+        setMessage(res.data.message);
+        setSpinnerOn(false);
+        setCurrentArticleId(null);
+      })
+      .catch((err) => {
+        setMessage(err.response.data.message);
+        setSpinnerOn(false);
+      });
   };
+
+  useEffect(() => {
+    console.log("currentArticleId", currentArticleId);
+  }, [currentArticleId]);
 
   const deleteArticle = (article_id) => {
     // ✨ implement
     setSpinnerOn(true);
     // setCurrentArticleId(article_id);
     axiosWithAuth()
-      .delete(`http://localhost:9000/api/articles/${article_id}`)
+      .delete(`${articlesUrl}/${article_id}`)
       .then((res) => {
         setArticles(articles.filter((art) => art.article_id !== article_id));
         setMessage(res.data.message);
         setSpinnerOn(false);
       })
       .catch((err) => {
-        setMessage(err);
+        setMessage(err.response.data.message);
         setSpinnerOn(false);
       });
   };
@@ -157,7 +174,8 @@ export default function App() {
                 <ArticleForm
                   postArticle={postArticle}
                   currentArticleId={currentArticleId}
-                  setCurrentArticleId={setCurrentArticleId}
+                  articles={articles}
+                  updateArticle={updateArticle}
                 />
                 <Articles
                   getArticles={getArticles}
@@ -165,6 +183,8 @@ export default function App() {
                   redirectToLogin={redirectToLogin}
                   currentArticleId={currentArticleId}
                   deleteArticle={deleteArticle}
+                  updateArticle={updateArticle}
+                  setCurrentArticleId={setCurrentArticleId}
                 />
               </>
             }

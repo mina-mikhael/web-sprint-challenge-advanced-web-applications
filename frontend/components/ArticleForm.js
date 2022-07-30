@@ -3,7 +3,7 @@ import PT from 'prop-types'
 
 const initialFormValues = { title: '', text: '', topic: '' }
 
-export default function ArticleForm({ postArticle, currentArticleId, setCurrentArticleId }) {
+export default function ArticleForm({ postArticle, currentArticleId, articles, updateArticle }) {
   const [values, setValues] = useState(initialFormValues);
   // ✨ where are my props? Destructure them here
 
@@ -12,7 +12,10 @@ export default function ArticleForm({ postArticle, currentArticleId, setCurrentA
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
-  });
+    if (currentArticleId) {
+      setValues(...articles.filter((art) => art.article_id === currentArticleId));
+    } else setValues(initialFormValues);
+  }, [currentArticleId]);
 
   const changeHandler = (evt) => {
     const { id, value } = evt.target;
@@ -24,7 +27,9 @@ export default function ArticleForm({ postArticle, currentArticleId, setCurrentA
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-    postArticle({ ...values });
+    if (!currentArticleId) {
+      postArticle({ ...values });
+    } else updateArticle(currentArticleId, { ...values });
     setValues(initialFormValues);
   };
 
@@ -65,7 +70,9 @@ export default function ArticleForm({ postArticle, currentArticleId, setCurrentA
         <button disabled={isDisabled()} id="submitArticle">
           Submit
         </button>
-        <button onClick={Function.prototype}>Cancel edit</button>
+        {currentArticleId ? (
+          <button onClick={() => setValues(initialFormValues)}>Cancel edit</button>
+        ) : null}
       </div>
     </form>
   );
