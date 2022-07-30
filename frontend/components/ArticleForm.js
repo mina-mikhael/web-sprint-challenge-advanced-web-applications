@@ -46,7 +46,16 @@ export default function ArticleForm({
   const isDisabled = () => {
     // ✨ implement
     // Make sure the inputs have some values
-    if (values.title && values.text && values.topic) {
+    const currentArticle = articles.find((art) => art.article_id === currentArticleId);
+
+    if (!currentArticleId && values.title && values.text && values.topic) {
+      return false;
+    } else if (
+      currentArticleId &&
+      (values.title !== currentArticle.title ||
+        values.text !== currentArticle.text ||
+        values.topic !== currentArticle.topic)
+    ) {
       return false;
     } else return true;
   };
