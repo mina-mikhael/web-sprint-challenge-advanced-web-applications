@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink, Routes, Route, useNavigate } from "react-router-dom";
 import Articles from "./Articles";
 import LoginForm from "./LoginForm";
@@ -124,10 +124,6 @@ export default function App() {
       });
   };
 
-  useEffect(() => {
-    console.log("currentArticleId", currentArticleId);
-  }, [currentArticleId]);
-
   const deleteArticle = (article_id) => {
     // ✨ implement
     setSpinnerOn(true);
@@ -174,6 +170,7 @@ export default function App() {
                 <ArticleForm
                   postArticle={postArticle}
                   currentArticleId={currentArticleId}
+                  setCurrentArticleId={setCurrentArticleId}
                   articles={articles}
                   updateArticle={updateArticle}
                 />

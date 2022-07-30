@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
-import PT from 'prop-types'
+import React, { useEffect } from "react";
+import PT from "prop-types";
 
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
@@ -49,14 +48,17 @@ export default function Articles(props) {
 
 // 🔥 No touchy: Articles expects the following props exactly:
 Articles.propTypes = {
-  articles: PT.arrayOf(PT.shape({ // the array can be empty
-    article_id: PT.number.isRequired,
-    title: PT.string.isRequired,
-    text: PT.string.isRequired,
-    topic: PT.string.isRequired,
-  })).isRequired,
+  articles: PT.arrayOf(
+    PT.shape({
+      // the array can be empty
+      article_id: PT.number.isRequired,
+      title: PT.string.isRequired,
+      text: PT.string.isRequired,
+      topic: PT.string.isRequired,
+    })
+  ).isRequired,
   getArticles: PT.func.isRequired,
   deleteArticle: PT.func.isRequired,
   setCurrentArticleId: PT.func.isRequired,
   currentArticleId: PT.number, // can be undefined or null
-}
+};

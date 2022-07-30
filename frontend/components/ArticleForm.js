@@ -3,7 +3,13 @@ import PT from 'prop-types'
 
 const initialFormValues = { title: '', text: '', topic: '' }
 
-export default function ArticleForm({ postArticle, currentArticleId, articles, updateArticle }) {
+export default function ArticleForm({
+  postArticle,
+  currentArticleId,
+  setCurrentArticleId,
+  articles,
+  updateArticle,
+}) {
   const [values, setValues] = useState(initialFormValues);
   // ✨ where are my props? Destructure them here
 
@@ -27,10 +33,16 @@ export default function ArticleForm({ postArticle, currentArticleId, articles, u
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-    if (!currentArticleId) {
-      postArticle({ ...values });
-    } else updateArticle(currentArticleId, { ...values });
-    setValues(initialFormValues);
+    // console.log(evt.nativeEvent.submitter.id);
+    if (evt.nativeEvent.submitter.id === "submitArticle") {
+      if (!currentArticleId) {
+        postArticle({ ...values });
+      } else updateArticle(currentArticleId, { ...values });
+      setValues(initialFormValues);
+    } else {
+      setValues(initialFormValues);
+      setCurrentArticleId(null);
+    }
   };
 
   const isDisabled = () => {
