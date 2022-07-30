@@ -33,16 +33,14 @@ export default function ArticleForm({
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-    // console.log(evt.nativeEvent.submitter.id);
-    if (evt.nativeEvent.submitter.id === "submitArticle") {
-      if (!currentArticleId) {
-        postArticle({ ...values });
-      } else updateArticle(currentArticleId, { ...values });
+    if (!currentArticleId) {
+      postArticle({ ...values });
       setValues(initialFormValues);
     } else {
       setValues(initialFormValues);
-      setCurrentArticleId(null);
+      updateArticle(currentArticleId, { ...values });
     }
+    setCurrentArticleId(null);
   };
 
   const isDisabled = () => {
@@ -83,7 +81,14 @@ export default function ArticleForm({
           Submit
         </button>
         {currentArticleId ? (
-          <button onClick={() => setValues(initialFormValues)}>Cancel edit</button>
+          <button
+            onClick={() => {
+              setValues(initialFormValues);
+              setCurrentArticleId(null);
+            }}
+            type="button">
+            Cancel edit
+          </button>
         ) : null}
       </div>
     </form>

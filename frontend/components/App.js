@@ -110,10 +110,15 @@ export default function App() {
     axiosWithAuth()
       .put(`${articlesUrl}/${id}`, article)
       .then((res) => {
-        setArticles([
-          ...articles.filter((art) => art.article_id !== currentArticleId),
-          res.data.article,
-        ]);
+        setArticles(
+          articles.map((art) => {
+            if (art.article_id === id) {
+              return res.data.article;
+            } else {
+              return art;
+            }
+          })
+        );
         setMessage(res.data.message);
         setSpinnerOn(false);
         setCurrentArticleId(null);
